@@ -1,0 +1,179 @@
+$action: rgb(100, 154, 255);
+$fade: rgba(0, 0, 0, 0.25);
+
+.container {
+	display: grid;
+	grid-template-columns: 3fr 1fr;
+	max-width: 100vw;
+
+	.main {
+		display: grid;
+		grid-template-columns: 2fr 3fr;
+		column-gap: 2em;
+		padding: 1em;
+		max-height: 94vh;
+		overflow-y: scroll;
+
+		.filters {
+			display: flex;
+			flex-direction: column;
+			border: 1px solid $fade;
+			border-radius: 4px;
+			height: fit-content;
+
+			.filter {
+				margin: 0.25em 0.5em;
+			}
+
+			.input-row {
+				position: relative;
+				display: grid;
+				grid-template-columns: 3fr 1fr;
+				height: 3em;
+				padding: 1em;
+
+				.input {
+					height: 2em;
+					padding-left: 0.5em;
+					border: 1px solid $fade;
+					border-radius: 4px;
+					outline: none;
+					margin-top: auto;
+					margin-bottom: auto;
+
+					&:focus {
+						border: 1px solid $action;
+					}
+				}
+
+				.create-button {
+					background-color: $action;
+					height: 2em;
+					display: block;
+					margin-top: auto;
+					margin-bottom: auto;
+					margin-left: 2em;
+					border: 1px solid darken($color: $action, $amount: 5%);
+					border-radius: 4px;
+					transition: all 125ms ease-in-out;
+					color: white;
+
+					&:hover {
+						background-color: darken($color: $action, $amount: 10%);
+						border-color: $action;
+						transition: all 125ms ease-in-out;
+						cursor: pointer;
+					}
+				}
+
+				.caption {
+					position: absolute;
+					left: 1.8em;
+					top: 2.5em;
+					font: 400 13.3333px Arial;
+					transition: all 250ms ease-in-out;
+
+					&.contentful {
+						font: 400 9px Arial;
+						top: 1.5em;
+						left: 2em;
+						color: $action;
+						transition: all 250ms ease-in-out;
+					}
+				}
+			}
+
+			.additional-inputs {
+				display: grid;
+				grid-template-columns: 3fr 1fr;
+				height: 2em;
+				padding: 0.5em 1em;
+
+				.toggle-container {
+					height: 1em;
+					width: 2em;
+					margin: 0 auto;
+					border-radius: 0.5em;
+					cursor: pointer;
+					border: 1px solid $fade;
+					background-color: $fade;
+
+					.slider-container {
+						display: block;
+						margin: 0.05em;
+						background-color: $fade;
+						height: 0.9em;
+						width: 1.9em;
+						border-radius: 0.5em;
+						box-sizing: content-box;
+						position: relative;
+						transition: all 175ms ease-in-out;
+
+						.slider {
+							display: block;
+							position: absolute;
+							height: 0.9em;
+							width: 0.9em;
+							border-radius: 50%;
+							background-color: white;
+							left: 0;
+							transition: all 175ms ease-in-out;
+						}
+					}
+
+					.checkbox:checked + .slider-container {
+						background-color: $action;
+						transition: all 175ms ease-in-out;
+
+						.slider {
+							left: 1em;
+							transition: all 175ms ease-in-out;
+						}
+					}
+
+					.checkbox {
+						height: 0;
+						width: 0;
+						position: absolute;
+					}
+				}
+
+				.button {
+					background-color: $action;
+					height: 2em;
+					display: block;
+					margin-top: auto;
+					margin-bottom: auto;
+					margin-left: 2em;
+					border: 1px solid darken($color: $action, $amount: 5%);
+					border-radius: 4px;
+					transition: all 125ms ease-in-out;
+					color: white;
+					width: 6em;
+
+					&:hover {
+						background-color: darken($color: $action, $amount: 10%);
+						border-color: $action;
+						transition: all 125ms ease-in-out;
+						cursor: pointer;
+					}
+				}
+			}
+		}
+
+		.results {
+			display: block;
+			max-width: 100%;
+			overflow: hidden;
+
+			.result {
+				max-width: 100%;
+
+				.mail {
+					max-width: 100%;
+					overflow-wrap: break-word;
+				}
+			}
+		}
+	}
+}
