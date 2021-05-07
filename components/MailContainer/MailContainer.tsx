@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import Triangle from '../Triangle/Triangle';
 import styles from './MailContainer.module.scss';
 
@@ -17,4 +17,4 @@ const MailContainer: React.FC<React.PropsWithChildren<Props>> = ({ initOpen, chi
 	);
 };
 
-export default MailContainer;
+export default memo(MailContainer, (prev, next) => prev.children === next.children);

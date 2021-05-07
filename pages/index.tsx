@@ -15,7 +15,8 @@ const Index: NextPage = () => {
 
 	useEffect(() => {
 		axios.get('https://spam-db.herokuapp.com').then((res) => {
-			setSpam(res.data as string[]);
+			// eslint-disable-next-line no-control-regex
+			setSpam((res.data as string[]).filter((mail) => mail.trim() !== '' && /^[\x21-\x7F]+$/.test(mail)));
 		});
 	}, []);
 
@@ -33,7 +34,7 @@ const Index: NextPage = () => {
 		if (spam) {
 			setTestResults(
 				spam.map((mail) => {
-					const caughtBy = processedFilters.filter((filter) => filter.test(mail)).map((regex) => regex.source);
+					const caughtBy = processedFilters.filter((filter) => filter.test(mail)).map((_, i) => filters[i]);
 
 					if (caughtBy.length !== 0) {
 						return { success: true, mail, caughtBy };
@@ -97,16 +98,16 @@ const Index: NextPage = () => {
 					{testResults ? (
 						testResults
 							.sort((a, b) => (b.success && !a.success ? -1 : a.success === b.success ? 0 : 1))
-							.map((result) =>
+							.map((result, i) =>
 								result.success ? (
-									<div className={styles.result}>
+									<div className={styles.result} key={i}>
 										<MailContainer initOpen={false}>
 											<div className={styles.mail}>{result.mail}</div>
 											Caught By Rules: {result.caughtBy.join(', ')}
 										</MailContainer>
 									</div>
 								) : (
-									<div className={styles.result}>
+									<div className={styles.result} key={i}>
 										<MailContainer initOpen={true}>
 											<div className={styles.mail}>{result.mail}</div>
 										</MailContainer>
