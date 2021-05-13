@@ -3,7 +3,7 @@ $fade: rgba(0, 0, 0, 0.25);
 
 .container {
 	display: grid;
-	grid-template-columns: 3fr 1fr;
+	grid-template-columns: 1fr;
 	max-width: 100vw;
 
 	.main {
@@ -23,6 +23,15 @@ $fade: rgba(0, 0, 0, 0.25);
 
 			.filter {
 				margin: 0.25em 0.5em;
+
+				&:hover {
+					text-decoration: line-through;
+					cursor: pointer;
+				}
+
+				&:nth-child(odd) {
+					background-color: $fade;
+				}
 			}
 
 			.input-row {
@@ -72,6 +81,7 @@ $fade: rgba(0, 0, 0, 0.25);
 					top: 2.5em;
 					font: 400 13.3333px Arial;
 					transition: all 250ms ease-in-out;
+					pointer-events: none;
 
 					&.contentful {
 						font: 400 9px Arial;

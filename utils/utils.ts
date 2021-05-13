@@ -26,8 +26,8 @@ export function standardToEgrep(regex: string): string {
 		.replaceAll('[A-Z]', '[:upper:]')
 		.replaceAll('[0-9]', '[:digit:]')
 		.replaceAll('[ \t]', '[:blank:]')
-		.replaceAll(/\\b\w+/, '\\<')
-		.replaceAll(/\w+\\b/, '\\>');
+		.replaceAll(/\\b\w+/g, '\\<')
+		.replaceAll(/\w+\\b/g, '\\>');
 }
 
 export function isValidRegex(regex: string, egrep: boolean): boolean {

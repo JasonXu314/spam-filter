@@ -4,7 +4,7 @@ import { GetServerSideProps, NextPage } from 'next/types';
 import { useCallback, useEffect, useState } from 'react';
 import MailContainer from '../components/MailContainer/MailContainer';
 import styles from '../sass/Index.module.scss';
-import { egrepToStandard, isValidRegex } from '../utils/utils';
+import { egrepToStandard, isValidRegex, standardToEgrep } from '../utils/utils';
 
 const Index: NextPage = () => {
 	const [filters, setFilters] = useState<string[]>([]);
@@ -15,8 +15,7 @@ const Index: NextPage = () => {
 
 	useEffect(() => {
 		axios.get('https://spam-db.herokuapp.com').then((res) => {
-			// eslint-disable-next-line no-control-regex
-			setSpam((res.data as string[]).filter((mail) => mail.trim() !== '' && /^[\x21-\x7F]+$/.test(mail)));
+			setSpam(res.data as string[]);
 		});
 	}, []);
 
@@ -29,22 +28,32 @@ const Index: NextPage = () => {
 	}, [newFilter, useEgrep]);
 
 	const testFilters = useCallback(() => {
-		const processedFilters = useEgrep ? filters.map((filter) => new RegExp(egrepToStandard(filter))) : filters.map((filter) => new RegExp(filter));
-
-		if (spam) {
-			setTestResults(
-				spam.map((mail) => {
-					const caughtBy = processedFilters.filter((filter) => filter.test(mail)).map((_, i) => filters[i]);
-
-					if (caughtBy.length !== 0) {
-						return { success: true, mail, caughtBy };
-					} else {
-						return { success: false, mail };
-					}
-				})
-			);
+		if (filters.length !== 0) {
+			const processedFilters = useEgrep ? filters.map((filter) => new RegExp(egrepToStandard(filter))) : filters.map((filter) => new RegExp(filter));
+	
+			if (spam) {
+				setTestResults(
+					spam.map((mail) => {
+						const caughtBy = processedFilters.filter((filter) => filter.test(mail)).map((_, i) => filters[i]);
+	
+						if (caughtBy.length !== 0) {
+							return { success: true, mail, caughtBy };
+						} else {
+							return { success: false, mail };
+						}
+					})
+				);
+			}
 		}
 	}, [spam, filters, useEgrep]);
+
+	useEffect(() => {
+		if (useEgrep) {
+			setFilters((filters) => filters.map((filter) => standardToEgrep(filter)));
+		} else {
+			setFilters((filters) => filters.map((filter) => egrepToStandard(filter)));
+		}
+	}, [useEgrep]);
 
 	return (
 		<div className={styles.container}>
@@ -54,7 +63,7 @@ const Index: NextPage = () => {
 			<div className={styles.main}>
 				<div className={styles.filters}>
 					{filters.map((filter, i) => (
-						<div className={styles.filter} key={i}>
+						<div className={styles.filter} onClick={() => setFilters([...filters.slice(0, i), ...filters.slice(i + 1)])} key={i}>
 							{filter}
 						</div>
 					))}
@@ -119,7 +128,6 @@ const Index: NextPage = () => {
 					)}
 				</div>
 			</div>
-			<div className={styles.sidebar}>Sidebar</div>
 		</div>
 	);
 };
